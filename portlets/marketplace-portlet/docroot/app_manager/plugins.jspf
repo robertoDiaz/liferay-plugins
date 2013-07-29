@@ -37,8 +37,6 @@
 
 				<%
 				LayoutTemplate layoutTemplate = (LayoutTemplate)plugin;
-
-				PluginSetting pluginSetting = PluginSettingLocalServiceUtil.getPluginSetting(company.getCompanyId(), layoutTemplate.getThemeId(), Plugin.TYPE_LAYOUT_TEMPLATE);
 				%>
 
 				<tr>
@@ -48,7 +46,12 @@
 					<td>
 						<liferay-ui:message key="layout-template" />
 					</td>
-					<td>
+					<td class="plugin-actions">
+
+						<%
+						PluginSetting pluginSetting = PluginSettingLocalServiceUtil.getPluginSetting(company.getCompanyId(), layoutTemplate.getLayoutTemplateId(), Plugin.TYPE_LAYOUT_TEMPLATE);
+						%>
+
 						<c:choose>
 							<c:when test="<%= pluginSetting.isActive() %>">
 								<liferay-portlet:actionURL name="updatePluginSetting" var="deactivateURL">
@@ -57,7 +60,7 @@
 									<portlet:param name="active" value="<%= String.valueOf(false) %>" />
 								</liferay-portlet:actionURL>
 
-								<a class="btn btn-mini btn-success" href="<%= deactivateURL %>"><liferay-ui:message key="active" /></a>
+								<a class="btn btn-mini btn-success deactivate" href="<%= deactivateURL %>"><liferay-ui:message key="active" /></a>
 							</c:when>
 							<c:otherwise>
 								<liferay-portlet:actionURL name="updatePluginSetting" var="activateURL">
@@ -66,7 +69,7 @@
 									<portlet:param name="active" value="<%= String.valueOf(true) %>" />
 								</liferay-portlet:actionURL>
 
-								<a class="btn btn-mini btn-danger" href="<%= activateURL %>"><liferay-ui:message key="inactive" /></a>
+								<a class="btn btn-mini btn-danger activate" href="<%= activateURL %>"><liferay-ui:message key="inactive" /></a>
 							</c:otherwise>
 						</c:choose>
 					</td>
@@ -78,12 +81,15 @@
 				Portlet portlet = (Portlet)plugin;
 
 				portlet = PortletLocalServiceUtil.getPortletById(themeDisplay.getCompanyId(), portlet.getPortletId());
-
-				String title = PortalUtil.getPortletTitle(portlet, application, locale);
 				%>
 
 				<tr>
 					<td>
+
+						<%
+						String title = PortalUtil.getPortletTitle(portlet, application, locale);
+						%>
+
 						<%= title %>
 
 						<c:if test="<%= !title.equals(portlet.getDisplayName()) %>">
@@ -92,8 +98,50 @@
 					</td>
 					<td>
 						<liferay-ui:message key="portlet" />
+
+						<%
+						String controlPanelEntryCategory = portlet.getControlPanelEntryCategory();
+						%>
+
+						<c:if test="<%= Validator.isNotNull(controlPanelEntryCategory) %>">
+
+							<%
+							String tooltipTitle = StringPool.BLANK;
+
+							if (controlPanelEntryCategory.startsWith(PortletCategoryKeys.SITE_ADMINISTRATION)) {
+								tooltipTitle = "this-portlet-is-available-in-site-administration";
+							}
+							else if (controlPanelEntryCategory.equals(PortletCategoryKeys.MY)) {
+								tooltipTitle = "this-portlet-is-available-in-my-account";
+							}
+							else {
+								tooltipTitle = "this-portlet-is-available-in-the-control-panel";
+							}
+							%>
+
+							<i class="icon-wrench" data-title="<liferay-ui:message key="<%= tooltipTitle %>" />"></i>
+						</c:if>
 					</td>
-					<td>
+					<td class="plugin-actions">
+
+						<%
+						List<String> indexerClasses = portlet.getIndexerClasses();
+						%>
+
+						<c:if test="<%= !indexerClasses.isEmpty() %>">
+
+							<%
+							LiferayPortletURL reindexURL = PortletURLFactoryUtil.create(request, PortletKeys.ADMIN, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE);
+
+							reindexURL.setParameter("struts_action", "/admin/edit_server");
+							reindexURL.setParameter(Constants.CMD, "reindex");
+							reindexURL.setParameter("redirect", PortalUtil.getCurrentURL(request));
+							reindexURL.setParameter("portletId", portlet.getPortletId());
+							%>
+
+							<a class="btn btn-mini btn-info reindex" href="<%= reindexURL %>"><liferay-ui:message key="reindex-search" /></a>
+						</c:if>
+
 						<c:choose>
 							<c:when test="<%= portlet.isActive() %>">
 								<liferay-portlet:actionURL name="updatePluginSetting" var="deactivateURL">
@@ -102,7 +150,7 @@
 									<portlet:param name="active" value="<%= String.valueOf(false) %>" />
 								</liferay-portlet:actionURL>
 
-								<a class="btn btn-mini btn-success" href="<%= deactivateURL %>"><liferay-ui:message key="active" /></a>
+								<a class="btn btn-mini btn-success deactivate" href="<%= deactivateURL %>"><liferay-ui:message key="active" /></a>
 							</c:when>
 							<c:otherwise>
 								<liferay-portlet:actionURL name="updatePluginSetting" var="activateURL">
@@ -111,7 +159,7 @@
 									<portlet:param name="active" value="<%= String.valueOf(true) %>" />
 								</liferay-portlet:actionURL>
 
-								<a class="btn btn-mini btn-danger" href="<%= activateURL %>"><liferay-ui:message key="inactive" /></a>
+								<a class="btn btn-mini btn-danger activate" href="<%= activateURL %>"><liferay-ui:message key="inactive" /></a>
 							</c:otherwise>
 						</c:choose>
 					</td>
@@ -121,8 +169,6 @@
 
 				<%
 				Theme curTheme = (Theme)plugin;
-
-				PluginSetting pluginSetting = PluginSettingLocalServiceUtil.getPluginSetting(company.getCompanyId(), curTheme.getThemeId(), Plugin.TYPE_THEME);
 				%>
 
 				<tr>
@@ -132,7 +178,12 @@
 					<td>
 						<liferay-ui:message key="theme" />
 					</td>
-					<td>
+					<td class="plugin-actions">
+
+						<%
+						PluginSetting pluginSetting = PluginSettingLocalServiceUtil.getPluginSetting(company.getCompanyId(), curTheme.getThemeId(), Plugin.TYPE_THEME);
+						%>
+
 						<c:choose>
 							<c:when test="<%= pluginSetting.isActive() %>">
 								<liferay-portlet:actionURL name="updatePluginSetting" var="deactivateURL">
@@ -141,7 +192,7 @@
 									<portlet:param name="active" value="<%= String.valueOf(false) %>" />
 								</liferay-portlet:actionURL>
 
-								<a class="btn btn-mini btn-success" href="<%= deactivateURL %>"><liferay-ui:message key="active" /></a>
+								<a class="btn btn-mini btn-success deactivate" href="<%= deactivateURL %>"><liferay-ui:message key="active" /></a>
 							</c:when>
 							<c:otherwise>
 								<liferay-portlet:actionURL name="updatePluginSetting" var="activateURL">
@@ -150,7 +201,7 @@
 									<portlet:param name="active" value="<%= String.valueOf(true) %>" />
 								</liferay-portlet:actionURL>
 
-								<a class="btn btn-mini btn-danger" href="<%= activateURL %>"><liferay-ui:message key="inactive" /></a>
+								<a class="btn btn-mini btn-danger activate" href="<%= activateURL %>"><liferay-ui:message key="inactive" /></a>
 							</c:otherwise>
 						</c:choose>
 					</td>

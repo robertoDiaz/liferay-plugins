@@ -20,6 +20,7 @@ import com.liferay.calendar.service.ClpSerializer;
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
@@ -799,25 +800,6 @@ public class CalendarClp extends BaseModelImpl<Calendar> implements Calendar {
 	}
 
 	@Override
-	public long getResourceGroupId() {
-		try {
-			String methodName = "getResourceGroupId";
-
-			Class<?>[] parameterTypes = new Class<?>[] {  };
-
-			Object[] parameterValues = new Object[] {  };
-
-			Long returnObj = (Long)invokeOnRemoteModel(methodName,
-					parameterTypes, parameterValues);
-
-			return returnObj;
-		}
-		catch (Exception e) {
-			throw new UnsupportedOperationException(e);
-		}
-	}
-
-	@Override
 	public com.liferay.calendar.model.CalendarResource getCalendarResource() {
 		try {
 			String methodName = "getCalendarResource";
@@ -834,6 +816,12 @@ public class CalendarClp extends BaseModelImpl<Calendar> implements Calendar {
 		catch (Exception e) {
 			throw new UnsupportedOperationException(e);
 		}
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				Calendar.class.getName()));
 	}
 
 	public BaseModel<?> getCalendarRemoteModel() {

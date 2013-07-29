@@ -120,15 +120,15 @@ portletURL.setWindowState(LiferayWindowState.POP_UP);
 
 			// Modified date
 
-			row.addText(dateFormatDate.format(entry.getModifiedDate()));
+			row.addDate(entry.getModifiedDate());
 
 			// Display date
 
-			row.addText(dateFormatDate.format(entry.getDisplayDate()));
+			row.addDate(entry.getDisplayDate());
 
 			// Expiration date
 
-			row.addText(dateFormatDate.format(entry.getExpirationDate()));
+			row.addDate(entry.getExpirationDate());
 
 			// Action
 
@@ -165,6 +165,7 @@ portletURL.setWindowState(LiferayWindowState.POP_UP);
 
 	function <portlet:namespace />selectDistributionScope(distributionScope) {
 		var url = "<%= portletURL.toString() %>&<portlet:namespace />distributionScope=" + distributionScope;
+
 		submitForm(document.<portlet:namespace />fm, url);
 	}
 </aui:script>

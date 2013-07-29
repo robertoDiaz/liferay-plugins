@@ -69,6 +69,7 @@ import java.util.Map;
 public class CalendarImporterLocalServiceImpl
 	extends CalendarImporterLocalServiceBaseImpl {
 
+	@Override
 	public void importCalEvent(CalEvent calEvent)
 		throws PortalException, SystemException {
 
@@ -137,6 +138,7 @@ public class CalendarImporterLocalServiceImpl
 			calendarBookingId);
 	}
 
+	@Override
 	public void importCalEvents() throws PortalException, SystemException {
 		ActionableDynamicQuery actionableDynamicQuery =
 			new CalEventActionableDynamicQuery() {
@@ -691,8 +693,7 @@ public class CalendarImporterLocalServiceImpl
 			CalendarBooking.class.getName());
 
 		resourceBlockLocalService.updateIndividualScopePermissions(
-			calendarBooking.getCompanyId(),
-			calendarBooking.getResourceGroupId(),
+			calendarBooking.getCompanyId(), calendarBooking.getGroupId(),
 			CalendarBooking.class.getName(), calendarBooking,
 			resourcePermission.getRoleId(), actionIds,
 			ResourceBlockConstants.OPERATOR_SET);

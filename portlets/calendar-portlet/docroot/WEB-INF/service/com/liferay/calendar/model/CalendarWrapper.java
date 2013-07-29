@@ -14,6 +14,7 @@
 
 package com.liferay.calendar.model;
 
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
@@ -921,11 +922,6 @@ public class CalendarWrapper implements Calendar, ModelWrapper<Calendar> {
 	}
 
 	@Override
-	public long getResourceGroupId() {
-		return _calendar.getResourceGroupId();
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -942,6 +938,11 @@ public class CalendarWrapper implements Calendar, ModelWrapper<Calendar> {
 		}
 
 		return false;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return _calendar.getStagedModelType();
 	}
 
 	/**

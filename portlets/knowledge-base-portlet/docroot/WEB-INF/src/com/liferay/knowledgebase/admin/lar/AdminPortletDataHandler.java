@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.lar.BasePortletDataHandler;
 import com.liferay.portal.kernel.lar.DataLevel;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -66,9 +67,10 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 
 	public AdminPortletDataHandler() {
 		setDataLevel(DataLevel.SITE);
-		setDeletionSystemEventClassNames(
-			KBArticle.class.getName(), KBComment.class.getName(),
-			KBTemplate.class.getName());
+		setDeletionSystemEventStagedModelTypes(
+			new StagedModelType(KBArticle.class),
+			new StagedModelType(KBComment.class),
+			new StagedModelType(KBTemplate.class));
 		setExportControls(
 			new PortletDataHandlerBoolean(
 				NAMESPACE, "kb-articles", true, true),
@@ -461,7 +463,7 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 				KBArticle.class.getName(), kbArticle.getClassPK(),
 				PortletKeys.KNOWLEDGE_BASE_ADMIN,
 				kbArticle.getAttachmentsFolderId(), inputStream, fileName,
-				mimeType);
+				mimeType, true);
 		}
 
 		dirNames.put(resourcePrimKey, dirName);

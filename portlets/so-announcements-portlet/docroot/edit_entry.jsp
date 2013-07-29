@@ -22,6 +22,8 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
+String redirectMvcPath = HttpUtil.getParameter(HttpUtil.decodeURL(redirect), renderResponse.getNamespace() + "mvcPath", false);
+
 long entryId = ParamUtil.getLong(request, "entryId");
 
 AnnouncementsEntry entry = AnnouncementsEntryLocalServiceUtil.fetchAnnouncementsEntry(entryId);
@@ -45,6 +47,10 @@ if (entry == null) {
 	<aui:model-context bean="<%= entry %>" model="<%= AnnouncementsEntry.class %>" />
 
 	<aui:fieldset>
+		<c:if test='<%= redirectMvcPath.equals("/manage_entries.jsp") %>'>
+			<span class="back-link"><a href="<%= HtmlUtil.escape(redirect) %>">&laquo; Back</a></span>
+		</c:if>
+
 		<c:choose>
 			<c:when test="<%= entry != null %>">
 
@@ -118,9 +124,58 @@ if (entry == null) {
 	<aui:button-row>
 		<aui:button type="submit" />
 
+		<aui:button onClick='<%= renderResponse.getNamespace() + "previewEntry();" %>' value="preview" />
+
 		<aui:button onClick='<%= renderResponse.getNamespace() + "closeEntry();" %>' value="cancel" />
 	</aui:button-row>
 </aui:form>
+
+<div class="entry hide" id="<portlet:namespace />preview">
+	<div class="user-portrait">
+		<span class="avatar">
+
+			<%
+			User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
+			%>
+
+			<a href="<%= currentUser.getDisplayURL(themeDisplay) %>">
+				<img alt="<%= currentUser.getFullName() %>" src="<%= currentUser.getPortraitURL(themeDisplay) %>" />
+			</a>
+		</span>
+	</div>
+
+	<div class="entry-data">
+		<div class="entry-header">
+			<div class="entry-time">
+				<%= LanguageUtil.get(pageContext, "about-a-minute-ago") %>
+			</div>
+
+			<div class="entry-action">
+				<%= LanguageUtil.format(pageContext, "x-to-x", new Object[] {"<a href=\"" + currentUser.getDisplayURL(themeDisplay) + "\">" + currentUser.getFullName() + "</a>", "<span class=\"scope\" id=\"" + renderResponse.getNamespace() + "scope\"></span>"}) %>
+			</div>
+		</div>
+
+		<div class="entry-body">
+			<div class="title" id="<portlet:namespace />title"></div>
+
+			<div class="entry-content-container" id="<portlet:namespace />entryContentContainer">
+				<div class="entry-content" id="<portlet:namespace />entryContent"></div>
+			</div>
+		</div>
+
+		<div class="entry-footer" id="<portlet:namespace />entryFooter">
+			<div class="entry-footer-toolbar">
+				<div class="edit-actions">
+					<span class="toggle action hide">
+						<a class="toggle-entry" data-entryId="preview" href="javascript:;">
+							<span><liferay-ui:message key="view-more" /></span>
+						</a>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <aui:script>
 	function initEditor() {
@@ -135,12 +190,71 @@ if (entry == null) {
 		Liferay.Util.getWindow('<portlet:namespace />Dialog').close();
 	}
 
+	function <portlet:namespace />previewEntry() {
+		var A = AUI();
+
+		var preview = A.one('#<portlet:namespace />preview');
+
+		if (preview.hasClass('hide')) {
+			preview.removeClass('hide');
+		}
+
+		var priority = A.one('#priority')._node.selectedIndex;
+
+		if (priority == 1) {
+			preview.addClass('important-entry');
+		}
+		else {
+			preview.removeClass('important-entry');
+		}
+
+		if (<%= entry != null %>) {
+			var scope = A.one('#scope').get('value');;
+		}
+		else {
+			var optValue = A.one('select[name="distributionScope"]').get('value');
+			var scope = A.one('option[value=' + optValue + ']').get('text');
+		}
+
+		A.one('#<portlet:namespace />scope').html(scope);
+
+		var url = A.one('#url').get('value');
+
+		if (url.length != 0) {
+			var title = '<a href="' + url + '">' + A.one('#title').get('value') + '</a>';
+		}
+		else {
+			var title = A.one('#title').get('value');
+		}
+
+		A.one('#<portlet:namespace />title').html(title);
+
+		var content = window.editor.getHTML();
+
+		var previewContent = A.one('#<portlet:namespace />entryContent');
+
+		previewContent.html(content);
+
+		var previewFooter = A.one('#<portlet:namespace />entryFooter');
+
+		if (previewContent.height() > 75) {
+			var toggle = preview.one('.toggle');
+
+			toggle.removeClass('hide');
+
+			preview.addClass('announcement-collapsed')
+		}
+		else {
+			var contentContainer = preview.one('.entry-content-container');
+
+			contentContainer.setStyle('height', 'auto');
+		}
+	}
+
 	function <portlet:namespace />saveEntry() {
 		var A = AUI();
 
 		var form = document.<portlet:namespace />fm;
-
-		form.<%= Constants.CMD %>.value = "<%= (entry == null) ? Constants.ADD : Constants.UPDATE %>";
 
 		form.content.value = window.editor.getHTML();
 		form.target = '';
@@ -162,11 +276,16 @@ if (entry == null) {
 							}
 						}
 						else {
-							Liferay.Util.getWindow('<portlet:namespace />Dialog').close();
+							if (<%= redirectMvcPath.equals("/manage_entries.jsp") %>) {
+								window.location.href = '<%= HtmlUtil.escapeHREF(redirect) %>';
+							}
+							else {
+								Liferay.Util.getWindow('<portlet:namespace />Dialog').close();
 
-							var topWindow = Liferay.Util.getTop();
+								var topWindow = Liferay.Util.getTop();
 
-							topWindow.document.location.reload();
+								topWindow.document.location.reload();
+							}
 						}
 					}
 				},
@@ -177,4 +296,16 @@ if (entry == null) {
 			}
 		);
 	}
+</aui:script>
+
+<aui:script use="aui-base">
+	var announcementEntries = A.one('#main-content');
+
+	announcementEntries.delegate(
+		'click',
+		function(event) {
+			Liferay.Announcements.toggleEntry(event,'<portlet:namespace />');
+		},
+		'.toggle-entry'
+	);
 </aui:script>

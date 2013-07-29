@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.lar.DataLevel;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.xml.Element;
@@ -49,9 +50,10 @@ public class CalendarPortletDataHandler extends BasePortletDataHandler {
 	public CalendarPortletDataHandler() {
 		setDataLevel(DataLevel.SITE);
 		setDataLocalized(true);
-		setDeletionSystemEventClassNames(
-			Calendar.class.getName(), CalendarBooking.class.getName(),
-			CalendarResource.class.getName());
+		setDeletionSystemEventStagedModelTypes(
+			new StagedModelType(Calendar.class),
+			new StagedModelType(CalendarBooking.class),
+			new StagedModelType(CalendarResource.class));
 		setDataPortletPreferences(
 			"calendarNotificationBodyEmailInvite",
 			"calendarNotificationBodyEmailReminder",
@@ -560,7 +562,7 @@ public class CalendarPortletDataHandler extends BasePortletDataHandler {
 				importedCalendarResource =
 					CalendarResourceLocalServiceUtil.addCalendarResource(
 						userId, portletDataContext.getScopeGroupId(),
-						calendarResource.getClassName(), 0,
+						calendarResource.getClassNameId(), 0,
 						calendarResource.getClassUuid(),
 						calendarResource.getCode(),
 						calendarResource.getNameMap(),
@@ -580,7 +582,7 @@ public class CalendarPortletDataHandler extends BasePortletDataHandler {
 			importedCalendarResource =
 				CalendarResourceLocalServiceUtil.addCalendarResource(
 					userId, portletDataContext.getScopeGroupId(),
-					calendarResource.getClassName(), 0,
+					calendarResource.getClassNameId(), 0,
 					calendarResource.getClassUuid(), calendarResource.getCode(),
 					calendarResource.getNameMap(),
 					calendarResource.getDescriptionMap(),

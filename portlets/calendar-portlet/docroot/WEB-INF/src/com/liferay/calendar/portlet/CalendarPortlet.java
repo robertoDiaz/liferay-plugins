@@ -118,6 +118,7 @@ import javax.portlet.ResourceResponse;
  * @author Andrea Di Giorgi
  * @author Marcellus Tavares
  * @author Bruno Basto
+ * @author Pier Paolo Ramon
  */
 public class CalendarPortlet extends MVCPortlet {
 
@@ -145,6 +146,17 @@ public class CalendarPortlet extends MVCPortlet {
 		super.init();
 
 		NotificationTemplateContextFactory.setPortletConfig(getPortletConfig());
+	}
+
+	public void moveCalendarBookingToTrash(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		long calendarBookingId = ParamUtil.getLong(
+			actionRequest, "calendarBookingId");
+
+		CalendarBookingServiceUtil.moveCalendarBookingToTrash(
+			calendarBookingId);
 	}
 
 	@Override
@@ -383,7 +395,8 @@ public class CalendarPortlet extends MVCPortlet {
 
 		if (calendarResourceId <= 0) {
 			CalendarResourceServiceUtil.addCalendarResource(
-				serviceContext.getScopeGroupId(), null, 0,
+				serviceContext.getScopeGroupId(),
+				PortalUtil.getClassNameId(CalendarResource.class), 0,
 				PortalUUIDUtil.generate(), code, nameMap, descriptionMap,
 				active, serviceContext);
 		}

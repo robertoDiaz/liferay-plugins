@@ -38,14 +38,14 @@ if (status == WorkflowConstants.STATUS_DENIED) {
 		if (message.getUserId() == themeDisplay.getUserId()) {
 			displayMessage = true;
 
-			String deniedMessage = LanguageUtil.get(pageContext, WorkflowConstants.toLabel(status));
+			String deniedMessage = LanguageUtil.get(pageContext, WorkflowConstants.getStatusLabel(status));
 
 			int pos = html.indexOf(deniedMessage);
 
 			StringBundler sb = new StringBundler(4);
 
 			sb.append(html.substring(0, pos + deniedMessage.length()));
-			sb.append("<br />");
+			sb.append(". ");
 			sb.append(LanguageUtil.get(pageContext, "your-message-has-been-flagged-as-spam.-an-administrator-will-review-your-message-as-soon-as-possible"));
 			sb.append(html.substring(pos + deniedMessage.length()));
 
@@ -60,7 +60,7 @@ if (bean instanceof WikiPage) {
 	if ((wikiPage.getUserId() == themeDisplay.getUserId()) && (_isSpam(wikiPage) || _isPendingApproval(wikiPage))) {
 		displayMessage = true;
 
-		String deniedMessage = LanguageUtil.get(pageContext, WorkflowConstants.toLabel(status));
+		String deniedMessage = LanguageUtil.get(pageContext, WorkflowConstants.getStatusLabel(status));
 
 		int pos = html.indexOf(deniedMessage);
 
@@ -77,7 +77,7 @@ if (bean instanceof WikiPage) {
 %>
 
 <c:if test="<%= displayMessage %>">
-	<div class="portlet-msg-error">
+	<div class="alert alert-error">
 </c:if>
 
 <%= html %>

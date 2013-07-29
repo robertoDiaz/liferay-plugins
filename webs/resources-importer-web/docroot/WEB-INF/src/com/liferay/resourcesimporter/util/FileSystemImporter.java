@@ -77,6 +77,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -379,8 +380,6 @@ public class FileSystemImporter extends BaseImporter {
 
 		String title = FileUtil.stripExtension(fileName);
 
-		Map<Locale, String> titleMap = getMap(title);
-
 		JSONObject assetJSONObject = _assetJSONObjectMap.get(fileName);
 
 		Map<Locale, String> descriptionMap = null;
@@ -395,6 +394,11 @@ public class FileSystemImporter extends BaseImporter {
 		String content = StringUtil.read(inputStream);
 
 		content = processJournalArticleContent(content);
+
+		Locale articleDefaultLocale = LocaleUtil.fromLanguageId(
+			LocalizationUtil.getDefaultLocale(content));
+
+		Map<Locale, String> titleMap = getMap(articleDefaultLocale, title);
 
 		boolean smallImage = false;
 		String smallImageURL = StringPool.BLANK;
@@ -451,6 +455,14 @@ public class FileSystemImporter extends BaseImporter {
 		if (nameMapJSONObject != null) {
 			nameMap = (Map<Locale, String>)LocalizationUtil.deserialize(
 				nameMapJSONObject);
+
+			if (!nameMap.containsKey(LocaleUtil.getDefault())) {
+				Collection<String> values = nameMap.values();
+
+				Iterator iterator = values.iterator();
+
+				nameMap.put(LocaleUtil.getDefault(), (String)iterator.next());
+			}
 		}
 		else {
 			String name = layoutJSONObject.getString("name");
@@ -461,7 +473,7 @@ public class FileSystemImporter extends BaseImporter {
 		Map<Locale, String> titleMap = new HashMap<Locale, String>();
 
 		JSONObject titleMapJSONObject = layoutJSONObject.getJSONObject(
-			"nameMap");
+			"titleMap");
 
 		if (titleMapJSONObject != null) {
 			titleMap = (Map<Locale, String>)LocalizationUtil.deserialize(
@@ -735,12 +747,16 @@ public class FileSystemImporter extends BaseImporter {
 		return JSONFactoryUtil.createJSONObject(json);
 	}
 
-	protected Map<Locale, String> getMap(String value) {
+	protected Map<Locale, String> getMap(Locale locale, String value) {
 		Map<Locale, String> map = new HashMap<Locale, String>();
 
-		map.put(LocaleUtil.getDefault(), value);
+		map.put(locale, value);
 
 		return map;
+	}
+
+	protected Map<Locale, String> getMap(String value) {
+		return getMap(LocaleUtil.getDefault(), value);
 	}
 
 	protected boolean isJournalStructureXSD(String xsd) throws Exception {

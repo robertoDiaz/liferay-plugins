@@ -14,6 +14,7 @@
 
 package com.liferay.calendar.model;
 
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
@@ -1356,13 +1357,6 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	}
 
 	@Override
-	public long getResourceGroupId()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _calendarBooking.getResourceGroupId();
-	}
-
-	@Override
 	public com.liferay.calendar.notification.NotificationType getSecondReminderNotificationType() {
 		return _calendarBooking.getSecondReminderNotificationType();
 	}
@@ -1395,6 +1389,11 @@ public class CalendarBookingWrapper implements CalendarBooking,
 		}
 
 		return false;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return _calendarBooking.getStagedModelType();
 	}
 
 	/**

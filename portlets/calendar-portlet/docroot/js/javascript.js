@@ -42,14 +42,10 @@ AUI.add(
 		var ICON_CREATE_EVENT_NODE = 'iconCreateEventNode';
 
 		var TPL_ICON_CREATE_EVENT_NODE = '<button type="button" class="btn btn-primary calendar-create-event-btn">' +
-											'<i class="icon-plus icon-white"></i> ' + Liferay.Language.get('new-event') +
+											Liferay.Language.get('add-calendar-booking') +
 										 '</button>';
 
-		var COMPANY_GROUP_ID = toInt(themeDisplay.getCompanyGroupId());
-
 		var COMPANY_ID = toInt(themeDisplay.getCompanyId());
-
-		var GROUP_ID = toInt(themeDisplay.getScopeGroupId());
 
 		var USER_ID = toInt(themeDisplay.getUserId());
 
@@ -226,7 +222,7 @@ AUI.add(
 
 				instance.invokeService(
 					{
-						'/calendar-portlet/calendarbooking/delete-calendar-booking': {
+						'/calendar-portlet/calendarbooking/move-calendar-booking-to-trash': {
 							calendarBookingId: schedulerEvent.get('calendarBookingId')
 						}
 					},
@@ -403,7 +399,7 @@ AUI.add(
 							companyId: COMPANY_ID,
 							end: -1,
 							endTime: endDate.getTime(),
-							groupIds: [0, COMPANY_GROUP_ID, GROUP_ID].join(','),
+							groupIds: [],
 							keywords: null,
 							orderByComparator: null,
 							parentCalendarBookingId: -1,
@@ -810,7 +806,7 @@ AUI.add(
 		Liferay.CalendarUtil = CalendarUtil;
 
 		var CalendarWorkflow = {
-			STATUS_MAYBE: 8
+			STATUS_MAYBE: 9
 		};
 
 		A.mix(CalendarWorkflow, Workflow);
@@ -994,7 +990,7 @@ AUI.add(
 						instance._uiSetLoading(event.newVal);
 					},
 
-					_onStartDateChange: function() {
+					_onStartDateChange: function(event) {
 						var instance = this;
 
 						instance._uiSetStartDate(event.newVal);
@@ -1079,11 +1075,6 @@ AUI.add(
 						value: false
 					},
 
-					global: {
-						setter: A.DataType.Boolean.parse,
-						value: false
-					},
-
 					groupId: {
 						value: 0,
 						setter: toInt
@@ -1100,11 +1091,6 @@ AUI.add(
 						},
 						value: {},
 						validator: isObject
-					},
-
-					resourceGroupId: {
-						setter: toInt,
-						value: 0
 					}
 				},
 
@@ -1387,8 +1373,8 @@ AUI.add(
 								calendarId: 1,
 								color: 1,
 								content: 1,
-								endDate: 1,
-								startDate: 1
+								endTime: 1,
+								startTime: 1
 							};
 
 							var persist = true;
@@ -1542,7 +1528,7 @@ AUI.add(
 									destroyOnHide: true,
 									modal: true
 								},
-								title: Liferay.Language.get('add-event'),
+								title: Liferay.Language.get('new-calendar-booking'),
 								uri: Lang.sub(
 									editCalendarBookingURL,
 									{
@@ -1807,7 +1793,7 @@ AUI.add(
 									modal: true
 								},
 								refreshWindow: window,
-								title: Liferay.Language.get('edit'),
+								title: Liferay.Language.get('edit-calendar-booking'),
 								uri: Lang.sub(editCalendarBookingURL, data)
 							}
 						);
@@ -1840,12 +1826,12 @@ AUI.add(
 									modal: true
 								},
 								refreshWindow: window,
-								title: Liferay.Language.get('view'),
+								title: Liferay.Language.get('view-calendar-booking-details'),
 								uri: Lang.sub(viewCalendarBookingURL, data)
 							}
 						);
 
-						instance.hidePopover();
+						event.domEvent.preventDefault();
 					},
 
 					_hasAcceptButton: function(permissions, calendar, status) {
@@ -2063,7 +2049,7 @@ AUI.add(
 										},
 										icon: 'icon-eye-open',
 										id: 'viewBtn',
-										label: Liferay.Language.get('view')
+										label: Liferay.Language.get('view-details')
 									}
 								);
 							}

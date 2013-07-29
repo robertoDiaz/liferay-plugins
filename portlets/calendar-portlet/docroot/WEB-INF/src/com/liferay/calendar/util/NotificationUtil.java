@@ -128,8 +128,9 @@ public class NotificationUtil {
 		return notificationTypeSettingsProperties.get(propertyName);
 	}
 
-	public static void notifyCalendarBookingInvites(
+	public static void notifyCalendarBookingRecipients(
 			CalendarBooking calendarBooking, NotificationType notificationType,
+			NotificationTemplateType notificationTemplateType,
 			ServiceContext serviceContext)
 		throws Exception {
 
@@ -147,8 +148,8 @@ public class NotificationUtil {
 
 			NotificationTemplateContext notificationTemplateContext =
 				NotificationTemplateContextFactory.getInstance(
-					notificationType, NotificationTemplateType.INVITE,
-					calendarBooking, user, serviceContext);
+					notificationType, notificationTemplateType, calendarBooking,
+					user, serviceContext);
 
 			notificationSender.sendNotification(
 				notificationRecipient, notificationTemplateContext);
@@ -217,11 +218,10 @@ public class NotificationUtil {
 		return StringUtil.replace(
 			notificationTemplate,
 			new String[] {
-				"[$BOOKING_END_DATE$]", "[$BOOKING_LOCATION$]",
-				"[$BOOKING_START_DATE$]", "[$BOOKING_TITLE$]",
-				"[$BOOKING_URL$]", "[$FROM_ADDRESS$]", "[$FROM_NAME$]",
-				"[$PORTAL_URL$]", "[$PORTLET_NAME$]", "[$TO_ADDRESS$]",
-				"[$TO_NAME$]"
+				"[$EVENT_END_DATE$]", "[$EVENT_LOCATION$]",
+				"[$EVENT_START_DATE$]", "[$EVENT_TITLE$]", "[$EVENT_URL$]",
+				"[$FROM_ADDRESS$]", "[$FROM_NAME$]", "[$PORTAL_URL$]",
+				"[$PORTLET_NAME$]", "[$TO_ADDRESS$]", "[$TO_NAME$]"
 			},
 			new String[] {
 				GetterUtil.getString(notificationContext.get("endTime")),

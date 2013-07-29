@@ -22,13 +22,24 @@ portletURL.setParameter("category", category);
 
 <div class="row">
 	<div class="span3">
+		<div class="alert-container"></div>
+
 		<div class="category-nav well">
 			<%@ include file="/app_manager/categories.jspf" %>
 		</div>
 	</div>
 
 	<div class="apps span9">
-		<h3><liferay-ui:message key="all-apps" /></h3>
+		<h3>
+			<c:choose>
+				<c:when test="<%= Validator.isNull(category) %>">
+					<liferay-ui:message key="all-apps" />
+				</c:when>
+				<c:otherwise>
+					<%= category %>
+				</c:otherwise>
+			</c:choose>
+		</h3>
 
 		<%
 		List<App> apps = null;
@@ -76,9 +87,9 @@ portletURL.setParameter("category", category);
 					while (itr.hasNext()) {
 						Portlet portlet = itr.next();
 
-						String portletId = portlet.getPortletId();
+						String curPortletId = portlet.getPortletId();
 
-						if (portletId.equals(PortletKeys.PORTAL)) {
+						if (curPortletId.equals(PortletKeys.PORTAL)) {
 							itr.remove();
 						}
 						else if (portlet.isSystem()) {
@@ -162,7 +173,7 @@ portletURL.setParameter("category", category);
 				</div>
 
 				<c:if test='<%= !ArrayUtil.contains(contextNames, PortalUtil.getPathContext()) && !ArrayUtil.contains(contextNames, "marketplace-portlet") %>'>
-					<div class="actions">
+					<div class="app-actions">
 						<liferay-ui:icon-menu>
 							<liferay-portlet:actionURL name="updatePluginSettings" var="activateURL">
 								<portlet:param name="contextNames" value="<%= StringUtil.merge(app.getContextNames()) %>" />
@@ -190,8 +201,9 @@ portletURL.setParameter("category", category);
 								<portlet:param name="activate" value="<%= String.valueOf(false) %>" />
 							</liferay-portlet:actionURL>
 
-							<liferay-ui:icon
-								image="uninstall"
+							<liferay-ui:icon-delete
+								confirmation="are-you-sure-you-want-to-uninstall-this"
+								message="uninstall"
 								url="<%= uninstallURL %>"
 							/>
 						</liferay-ui:icon-menu>
@@ -206,8 +218,10 @@ portletURL.setParameter("category", category);
 	</div>
 </div>
 
-<aui:script use="aui-base">
-	A.one('.marketplace-portlet .apps').delegate(
+<aui:script use="anim,aui-base,aui-io,aui-tooltip,aui-url">
+	var marketplacePortlet = A.one('.marketplace-portlet');
+
+	marketplacePortlet.delegate(
 		'click',
 		function(event) {
 			var targetNode = event.currentTarget;
@@ -229,5 +243,106 @@ portletURL.setParameter("category", category);
 			}
 		},
 		'ul.summary'
-	)
+	);
+
+	var showMessage = function(message) {
+		marketplacePortlet.one('.alert-container').prepend(message);
+
+		setTimeout(
+			function() {
+				new A.Anim(
+					{
+						node: message,
+						on: {
+							end: function() {
+								var node = this.get('node');
+
+								node.get('parentNode').removeChild(node);
+							}
+						},
+						to: {
+							opacity: 0
+						}
+					}
+				).run();
+			},
+			2000
+		);
+	};
+
+	marketplacePortlet.delegate(
+		'click',
+		function(event) {
+			event.preventDefault();
+
+			var actionButton = event.currentTarget;
+
+			if (actionButton.hasClass('disabled')) {
+				return;
+			}
+
+			actionButton.addClass('disabled');
+
+			var url = new A.Url(actionButton.getAttribute('href'));
+
+			if (actionButton.hasClass('activate')) {
+				url.setParameter('<portlet:namespace />active', true);
+			}
+			else if (actionButton.hasClass('deactivate')) {
+				url.setParameter('<portlet:namespace />active', false);
+			}
+
+			A.io.request(
+				url.toString(),
+				{
+					after: {
+						complete: function(event, id, obj) {
+							actionButton.removeClass('disabled');
+						}
+					},
+					method: 'post',
+					on: {
+						failure: function(event, id, obj) {
+							showMessage(
+								A.Node.create(
+									'<div class="alert alert-error">' +
+										'<i class="icon-minus-sign"></i> <liferay-ui:message key="an-unexpected-error-occurred" />' +
+									'</div>'
+								)
+							);
+						},
+						success: function(event, id, obj) {
+							if (actionButton.hasClass('activate')) {
+								actionButton.setAttribute('class', 'btn btn-mini btn-success deactivate');
+
+								actionButton.html('<liferay-ui:message key="active" />');
+							}
+							else if (actionButton.hasClass('deactivate')) {
+								actionButton.setAttribute('class', 'btn btn-mini btn-danger activate');
+
+								actionButton.html('<liferay-ui:message key="inactive" />');
+							}
+
+							showMessage(
+								A.Node.create(
+									'<div class="alert alert-success">' +
+										'<i class="icon-ok"></i> <liferay-ui:message key="your-request-completed-successfully" />' +
+									'</div>'
+								)
+							);
+						}
+					}
+				}
+			);
+		},
+		'.plugin-actions .btn'
+	);
+
+	new A.TooltipDelegate(
+		{
+			position: 'top',
+			trigger: '.marketplace-portlet .apps i.icon-wrench',
+			zIndex: 100
+		}
+	);
 </aui:script>

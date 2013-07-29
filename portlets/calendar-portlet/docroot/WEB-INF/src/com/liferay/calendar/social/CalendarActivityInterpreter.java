@@ -26,6 +26,7 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
+import com.liferay.portlet.social.model.SocialActivityConstants;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
@@ -38,18 +39,6 @@ public class CalendarActivityInterpreter extends BaseSocialActivityInterpreter {
 	@Override
 	public String[] getClassNames() {
 		return _CLASS_NAMES;
-	}
-
-	@Override
-	protected String getEntryTitle(
-			SocialActivity activity, ServiceContext serviceContext)
-		throws Exception {
-
-		CalendarBooking calendarBooking =
-			CalendarBookingLocalServiceUtil.getCalendarBooking(
-				activity.getClassPK());
-
-		return calendarBooking.getTitle(serviceContext.getLocale());
 	}
 
 	@Override
@@ -84,6 +73,24 @@ public class CalendarActivityInterpreter extends BaseSocialActivityInterpreter {
 			}
 			else {
 				return "activity-calendar-booking-add-booking-in";
+			}
+		}
+		else if (activityType == SocialActivityConstants.TYPE_MOVE_TO_TRASH) {
+			if (Validator.isNull(groupName)) {
+				return "activity-calendar-booking-move-to-trash";
+			}
+			else {
+				return "activity-calendar-booking-move-to-trash-in";
+			}
+		}
+		else if (activityType ==
+					SocialActivityConstants.TYPE_RESTORE_FROM_TRASH) {
+
+			if (Validator.isNull(groupName)) {
+				return "activity-calendar-booking-restore-from-trash";
+			}
+			else {
+				return "activity-calendar-booking-restore-from-trash-in";
 			}
 		}
 		else if (activityType == CalendarActivityKeys.UPDATE_CALENDAR_BOOKING) {

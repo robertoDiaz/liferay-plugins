@@ -21,6 +21,7 @@ import com.liferay.marketplace.model.AppSoap;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -79,7 +80,7 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 			{ "iconURL", Types.VARCHAR },
 			{ "version", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Marketplace_App (uuid_ VARCHAR(75) null,appId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,remoteAppId LONG,title VARCHAR(75) null,description VARCHAR(75) null,category VARCHAR(75) null,iconURL VARCHAR(75) null,version VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table Marketplace_App (uuid_ VARCHAR(75) null,appId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,remoteAppId LONG,title VARCHAR(75) null,description STRING null,category VARCHAR(75) null,iconURL STRING null,version VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table Marketplace_App";
 	public static final String ORDER_BY_JPQL = " ORDER BY app.appId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY Marketplace_App.appId ASC";
@@ -517,6 +518,12 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	@Override
 	public void setVersion(String version) {
 		_version = version;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				App.class.getName()));
 	}
 
 	public long getColumnBitmask() {

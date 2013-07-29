@@ -21,20 +21,22 @@ String redirect = ParamUtil.getString(renderRequest, "redirect");
 
 String titleXml = LocalizationUtil.getLocalizationXmlFromPreferences(preferences, renderRequest, "title");
 String descriptionXml = LocalizationUtil.getLocalizationXmlFromPreferences(preferences, renderRequest, "description");
-boolean requireCaptcha = GetterUtil.getBoolean(preferences.getValue("requireCaptcha", StringPool.BLANK));
-String successURL = preferences.getValue("successURL", StringPool.BLANK);
+boolean requireCaptcha = ParamUtil.getBoolean(request, "preferences--requireCaptcha--", GetterUtil.getBoolean(preferences.getValue("requireCaptcha", StringPool.BLANK)));
+String successURL = ParamUtil.getString(request, "successURL", StringPool.BLANK);
 
-boolean sendAsEmail = GetterUtil.getBoolean(preferences.getValue("sendAsEmail", StringPool.BLANK));
-String emailFromName = WebFormUtil.getEmailFromName(preferences, company.getCompanyId());
-String emailFromAddress = WebFormUtil.getEmailFromAddress(preferences, company.getCompanyId());
-String emailAddress = preferences.getValue("emailAddress", StringPool.BLANK);
-String subject = preferences.getValue("subject", StringPool.BLANK);
+boolean sendAsEmail = ParamUtil.getBoolean(request, "preferences--sendAsEmail--", GetterUtil.getBoolean(preferences.getValue("sendAsEmail", StringPool.BLANK)));
 
-boolean saveToDatabase = GetterUtil.getBoolean(preferences.getValue("saveToDatabase", StringPool.BLANK));
-String databaseTableName = preferences.getValue("databaseTableName", StringPool.BLANK);
+String emailFromName = ParamUtil.getString(request, "preferences--emailFromName--", WebFormUtil.getEmailFromName(preferences, company.getCompanyId()));
+String emailFromAddress = ParamUtil.getString(request, "preferences--emailFromAddress--", WebFormUtil.getEmailFromAddress(preferences, company.getCompanyId()));
 
-boolean saveToFile = GetterUtil.getBoolean(preferences.getValue("saveToFile", StringPool.BLANK));
-String fileName = preferences.getValue("fileName", StringPool.BLANK);
+String emailAddress = ParamUtil.getString(request, "emailAddress", StringPool.BLANK);
+String emailSubject = ParamUtil.getString(request, "subject", StringPool.BLANK);
+
+boolean saveToDatabase = ParamUtil.getBoolean(request, "preferences--saveToDatabase--", GetterUtil.getBoolean(preferences.getValue("saveToDatabase", StringPool.BLANK)));
+String databaseTableName = ParamUtil.getString(request, "databaseTableName", StringPool.BLANK);
+
+boolean saveToFile = ParamUtil.getBoolean(request, "preferences--saveToFile--", GetterUtil.getBoolean(preferences.getValue("saveToFile", StringPool.BLANK)));
+String fileName = ParamUtil.getString(request, "fileName", StringPool.BLANK);
 
 boolean fieldsEditingDisabled = false;
 
@@ -88,7 +90,7 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 
 				<aui:input cssClass="lfr-input-text-container" helpMessage="add-email-addresses-separated-by-commas" label="addresses-to" name="preferences--emailAddress--" value="<%= emailAddress %>" />
 
-				<aui:input cssClass="lfr-input-text-container" name="preferences--subject--" value="<%= subject %>" />
+				<aui:input cssClass="lfr-input-text-container" name="preferences--subject--" value="<%= emailSubject %>" />
 
 			</aui:fieldset>
 
