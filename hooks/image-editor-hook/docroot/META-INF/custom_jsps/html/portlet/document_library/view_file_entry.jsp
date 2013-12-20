@@ -353,11 +353,12 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 										<div class="lfr-preview-file lfr-preview-image" id="<portlet:namespace />previewFile">
 											<div class="lfr-preview-file-content lfr-preview-image-content" id="<portlet:namespace />previewFileContent">
 												<div class="lfr-preview-file-image-current-column">
-													<div class="lfr-preview-file-image-container">
+													<div class="lfr-preview-file-image-container image-processor">
 														<img class="lfr-preview-file-image-current" src="<%= previewFileURL %>" />
 													</div>
 												</div>
 											</div>
+											<div class="toolbar"></div>
 										</div>
 									</c:when>
 									<c:when test="<%= hasVideo %>">
@@ -1082,29 +1083,19 @@ if (!portletId.equals(PortletKeys.TRASH)) {
 	<aui:button name="saveButton" value="save" />
 </aui:form>
 
-<aui:script>
-	AUI({
-		modules: {
-			external: {
-				fullpath: '/html/js/alloy/aui-image-editor/aui-image-editor.js',
-				requires: ['aui-base']
-			}
-		}
-	}).use('image-editor', function(A) {
-		debugger;
+<aui:script use="loader">
+	AUI().use('aui-image-editor', function(A) {
+		var imageEditor = new A.ImageEditor({
+			srcNode: '#<portlet:namespace />previewFile'
+		}).render();
+
+		A.one('#<portlet:namespace />saveButton').on('click', function(event) {
+			A.one('#<portlet:namespace />blob').val(imageEditor.getImageData());
+			submitForm(document.<portlet:namespace />fm);
+		});
 	});
 </aui:script>
 
-<aui:script use="aui-image-editor">
-	var imageEditor = new A.ImageEditor({
-		srcNode: '#<portlet:namespace />previewFile'
-	}).render();
-
-	A.one('#<portlet:namespace />saveButton').on('click', function(event) {
-		A.one('#<portlet:namespace />blob').val(imageEditor.getImageData());
-		submitForm(document.<portlet:namespace />fm);
-	});
-</aui:script>
 <%!
 private boolean _isEditableImage(FileVersion fileVersion)
 	throws SystemException {
