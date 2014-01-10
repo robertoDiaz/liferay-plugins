@@ -1,1 +1,0 @@
-YUI.add("aui-image-filters",function(e,t){var n=e.Lang,r=e.Object,i="image-filter-base",s="imageFilter:",o=e.Base.create(i,e.Base,[],{initializer:function(){},_notifyStateChange:function(e,t,n){var r=this,i=s+e;r.fire(i,{newVal:n,prevVal:t})}},{ATTRS:{containerNode:{validator:e.Node}}});e.ImageFilterBase=o},"2.0.0",{requires:["base-build","aui-base"]});

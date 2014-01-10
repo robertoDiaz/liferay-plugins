@@ -1,6 +1,0 @@
-if (typeof __coverage__ === 'undefined') { __coverage__ = {}; }
-if (!__coverage__['build/aui-image-processor-canvas-default/aui-image-processor-canvas-default.js']) {
-   __coverage__['build/aui-image-processor-canvas-default/aui-image-processor-canvas-default.js'] = {"path":"build/aui-image-processor-canvas-default/aui-image-processor-canvas-default.js","s":{"1":0,"2":0},"b":{},"f":{"1":0},"fnMap":{"1":{"name":"(anonymous_1)","line":1,"loc":{"start":{"line":1,"column":46},"end":{"line":1,"column":65}}}},"statementMap":{"1":{"start":{"line":1,"column":0},"end":{"line":5,"column":12}},"2":{"start":{"line":3,"column":0},"end":{"line":3,"column":42}}},"branchMap":{},"code":["(function () { YUI.add('aui-image-processor-canvas-default', function (A, NAME) {","","A.ImageProcessor = A.ImageProcessorCanvas;","","}, '2.0.0');","","}());"]};
-}
-var __cov_byQ8WfFzAPVm4piIxMY7Kg = __coverage__['build/aui-image-processor-canvas-default/aui-image-processor-canvas-default.js'];
-__cov_byQ8WfFzAPVm4piIxMY7Kg.s['1']++;YUI.add('aui-image-processor-canvas-default',function(A,NAME){__cov_byQ8WfFzAPVm4piIxMY7Kg.f['1']++;__cov_byQ8WfFzAPVm4piIxMY7Kg.s['2']++;A.ImageProcessor=A.ImageProcessorCanvas;},'2.0.0');
