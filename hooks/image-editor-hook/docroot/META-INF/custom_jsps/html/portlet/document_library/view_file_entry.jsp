@@ -358,7 +358,6 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 													</div>
 												</div>
 											</div>
-											<div class="toolbar"></div>
 										</div>
 									</c:when>
 									<c:when test="<%= hasVideo %>">
@@ -1083,16 +1082,14 @@ if (!portletId.equals(PortletKeys.TRASH)) {
 	<aui:button name="saveButton" value="save" />
 </aui:form>
 
-<aui:script use="loader">
-	AUI().use('aui-image-editor', function(A) {
-		var imageEditor = new A.ImageEditor({
-			srcNode: '#<portlet:namespace />previewFile'
-		}).render();
+<aui:script use="aui-image-editor">
+	var imageEditor = new A.ImageEditor({
+		srcNode: '.lfr-preview-file-image-container'
+	}).render();
 
-		A.one('#<portlet:namespace />saveButton').on('click', function(event) {
-			A.one('#<portlet:namespace />blob').val(imageEditor.getImageData());
-			submitForm(document.<portlet:namespace />fm);
-		});
+	A.one('#<portlet:namespace />saveButton').on('click', function(event) {
+		A.one('#<portlet:namespace />blob').val(imageEditor.getImageData());
+		submitForm(document.<portlet:namespace />fm);
 	});
 </aui:script>
 
@@ -1112,3 +1109,42 @@ private boolean _isEditableImage(FileVersion fileVersion)
 
 private static Log _log = LogFactoryUtil.getLog("portal-web.docroot.html.portlet.document_library.edit_file_entry_jsp");
 %>
+
+<style type="text/css">
+.image-editor-base {
+    display: inline-block;
+    position: relative;
+}
+
+.image-editor-base canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+}
+
+.image-editor-base .image-editor-processors {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.image-editor-base .image-editor-processors .image-processor-status {
+    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #FFFFFF;
+}
+
+.image-editor-base .image-processor-info, .image-editor-base .image-processor-widgets {
+    text-align: center;
+}
+
+.image-editor-base .image-processor-swf {
+    position: absolute;
+}
+
+.image-editor-base .image-editor-trigger-default, .image-editor-base .toolbar {
+    bottom: 10px;
+    left: 10px;
+    position: absolute;
+}
+</style>
