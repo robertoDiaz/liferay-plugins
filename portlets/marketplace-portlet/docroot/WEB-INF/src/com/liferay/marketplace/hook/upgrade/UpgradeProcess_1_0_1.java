@@ -12,20 +12,24 @@
  * details.
  */
 
-package com.liferay.knowledgebase.service.persistence;
+package com.liferay.marketplace.hook.upgrade;
 
-import aQute.bnd.annotation.ProviderType;
+import com.liferay.marketplace.hook.upgrade.v1_0_1.UpgradeModule;
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
 /**
- * @author Brian Wing Shun Chan
- * @generated
+ * @author Joan Kim
  */
-@ProviderType
-public interface KBArticleFinder {
-	public int countByUrlTitle(long groupId, java.lang.String kbFolderUrlTitle,
-		java.lang.String kbArticleUrlTitle, int[] status);
+public class UpgradeProcess_1_0_1 extends UpgradeProcess {
 
-	public java.util.List<com.liferay.knowledgebase.model.KBArticle> findByUrlTitle(
-		long groupId, java.lang.String kbFolderUrlTitle,
-		java.lang.String kbArticleUrlTitle, int[] status, int start, int end);
+	@Override
+	public int getThreshold() {
+		return 101;
+	}
+
+	@Override
+	protected void doUpgrade() throws Exception {
+		upgrade(UpgradeModule.class);
+	}
+
 }
