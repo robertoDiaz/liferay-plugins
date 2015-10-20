@@ -414,7 +414,7 @@ public abstract class MessageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 *
 	 * @return the message local service
 	 */
-	public com.liferay.mail.service.MessageLocalService getMessageLocalService() {
+	public MessageLocalService getMessageLocalService() {
 		return messageLocalService;
 	}
 
@@ -423,8 +423,7 @@ public abstract class MessageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 *
 	 * @param messageLocalService the message local service
 	 */
-	public void setMessageLocalService(
-		com.liferay.mail.service.MessageLocalService messageLocalService) {
+	public void setMessageLocalService(MessageLocalService messageLocalService) {
 		this.messageLocalService = messageLocalService;
 	}
 
@@ -697,7 +696,7 @@ public abstract class MessageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	@BeanReference(type = FolderPersistence.class)
 	protected FolderPersistence folderPersistence;
 	@BeanReference(type = com.liferay.mail.service.MessageLocalService.class)
-	protected com.liferay.mail.service.MessageLocalService messageLocalService;
+	protected MessageLocalService messageLocalService;
 	@BeanReference(type = MessagePersistence.class)
 	protected MessagePersistence messagePersistence;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)

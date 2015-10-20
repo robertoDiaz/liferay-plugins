@@ -75,13 +75,16 @@ public class SyncDLObjectServiceClpInvoker {
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName78 = "getAllFolderSyncDLObjects";
+		_methodName78 = "copyFileEntry";
 
-		_methodParameterTypes78 = new String[] { "long", "long" };
+		_methodParameterTypes78 = new String[] {
+				"long", "long", "long", "java.lang.String", "java.lang.String",
+				"com.liferay.portal.service.ServiceContext"
+			};
 
-		_methodName79 = "getAllSyncDLObjects";
+		_methodName79 = "getAllFolderSyncDLObjects";
 
-		_methodParameterTypes79 = new String[] { "long", "long" };
+		_methodParameterTypes79 = new String[] { "long" };
 
 		_methodName80 = "getFileEntrySyncDLObject";
 
@@ -119,17 +122,17 @@ public class SyncDLObjectServiceClpInvoker {
 
 		_methodParameterTypes87 = new String[] {  };
 
-		_methodName88 = "getSyncContext";
+		_methodName88 = "getSyncDLObjectUpdate";
 
-		_methodParameterTypes88 = new String[] { "java.lang.String" };
+		_methodParameterTypes88 = new String[] { "long", "long", "int" };
 
 		_methodName89 = "getSyncDLObjectUpdate";
 
-		_methodParameterTypes89 = new String[] { "long", "long", "long" };
+		_methodParameterTypes89 = new String[] { "long", "long", "int", "boolean" };
 
 		_methodName90 = "getSyncDLObjectUpdate";
 
-		_methodParameterTypes90 = new String[] { "long", "long", "long", "long" };
+		_methodParameterTypes90 = new String[] { "long", "long", "long" };
 
 		_methodName91 = "getUserSitesGroups";
 
@@ -255,14 +258,16 @@ public class SyncDLObjectServiceClpInvoker {
 
 		if (_methodName78.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes78, parameterTypes)) {
-			return SyncDLObjectServiceUtil.getAllFolderSyncDLObjects(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+			return SyncDLObjectServiceUtil.copyFileEntry(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue(),
+				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
+				(com.liferay.portal.service.ServiceContext)arguments[5]);
 		}
 
 		if (_methodName79.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes79, parameterTypes)) {
-			return SyncDLObjectServiceUtil.getAllSyncDLObjects(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+			return SyncDLObjectServiceUtil.getAllFolderSyncDLObjects(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName80.equals(name) &&
@@ -311,22 +316,24 @@ public class SyncDLObjectServiceClpInvoker {
 
 		if (_methodName88.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes88, parameterTypes)) {
-			return SyncDLObjectServiceUtil.getSyncContext((java.lang.String)arguments[0]);
+			return SyncDLObjectServiceUtil.getSyncDLObjectUpdate(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Integer)arguments[2]).intValue());
 		}
 
 		if (_methodName89.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes89, parameterTypes)) {
 			return SyncDLObjectServiceUtil.getSyncDLObjectUpdate(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
-				((Long)arguments[2]).longValue());
+				((Integer)arguments[2]).intValue(),
+				((Boolean)arguments[3]).booleanValue());
 		}
 
 		if (_methodName90.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes90, parameterTypes)) {
 			return SyncDLObjectServiceUtil.getSyncDLObjectUpdate(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
-				((Long)arguments[2]).longValue(),
-				((Long)arguments[3]).longValue());
+				((Long)arguments[2]).longValue());
 		}
 
 		if (_methodName91.equals(name) &&

@@ -77,7 +77,7 @@ public abstract class EntryServiceBaseImpl extends BaseServiceImpl
 	 *
 	 * @return the entry remote service
 	 */
-	public com.liferay.contacts.service.EntryService getEntryService() {
+	public EntryService getEntryService() {
 		return entryService;
 	}
 
@@ -86,8 +86,7 @@ public abstract class EntryServiceBaseImpl extends BaseServiceImpl
 	 *
 	 * @param entryService the entry remote service
 	 */
-	public void setEntryService(
-		com.liferay.contacts.service.EntryService entryService) {
+	public void setEntryService(EntryService entryService) {
 		this.entryService = entryService;
 	}
 
@@ -363,7 +362,7 @@ public abstract class EntryServiceBaseImpl extends BaseServiceImpl
 	@BeanReference(type = com.liferay.contacts.service.EntryLocalService.class)
 	protected com.liferay.contacts.service.EntryLocalService entryLocalService;
 	@BeanReference(type = com.liferay.contacts.service.EntryService.class)
-	protected com.liferay.contacts.service.EntryService entryService;
+	protected EntryService entryService;
 	@BeanReference(type = EntryPersistence.class)
 	protected EntryPersistence entryPersistence;
 	@BeanReference(type = EntryFinder.class)
