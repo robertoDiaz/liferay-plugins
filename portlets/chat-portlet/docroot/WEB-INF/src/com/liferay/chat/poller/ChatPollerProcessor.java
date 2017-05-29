@@ -115,8 +115,8 @@ public class ChatPollerProcessor extends BasePollerProcessor {
 					groupId, false);
 
 				if (layoutSet.getPageCount() > 0) {
-					displayURL = PortalUtil.getLayoutSetDisplayURL(layoutSet,
-						false);
+					displayURL = PortalUtil.getLayoutSetDisplayURL(
+						layoutSet, false);
 
 					displayURL = HttpUtil.removeDomain(displayURL);
 				}
@@ -130,6 +130,7 @@ public class ChatPollerProcessor extends BasePollerProcessor {
 				firstName, middleName, lastName);
 
 			curUserJSONObject.put("fullName", fullName);
+
 			curUserJSONObject.put("groupId", groupId);
 			curUserJSONObject.put("portraitId", portraitId);
 
@@ -143,6 +144,7 @@ public class ChatPollerProcessor extends BasePollerProcessor {
 			String statusMessage = buddyStatus.getMessage();
 
 			curUserJSONObject.put("statusMessage", statusMessage);
+
 			curUserJSONObject.put("userId", userId);
 
 			buddiesJSONArray.put(curUserJSONObject);
@@ -177,8 +179,8 @@ public class ChatPollerProcessor extends BasePollerProcessor {
 		for (Entry entry : entries) {
 			JSONObject entryJSONObject = JSONFactoryUtil.createJSONObject();
 
-			entryJSONObject.put("entryId", entry.getEntryId());
 			entryJSONObject.put("createDate", entry.getCreateDate());
+			entryJSONObject.put("entryId", entry.getEntryId());
 			entryJSONObject.put("fromUserId", entry.getFromUserId());
 
 			if (entry.getFromUserId() != pollerRequest.getUserId()) {
@@ -195,9 +197,9 @@ public class ChatPollerProcessor extends BasePollerProcessor {
 				}
 			}
 
-			entryJSONObject.put("toUserId", entry.getToUserId());
 			entryJSONObject.put("content", HtmlUtil.escape(entry.getContent()));
 			entryJSONObject.put("flag", entry.getFlag());
+			entryJSONObject.put("toUserId", entry.getToUserId());
 
 			entriesJSONArray.put(entryJSONObject);
 		}

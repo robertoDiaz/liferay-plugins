@@ -123,7 +123,7 @@ public class S3Cleaner extends BaseAMITool {
 			String name = bucket.getName();
 
 			if (name.startsWith("frw-cluster") ||
-				name.startsWith("lcs-cluster")) {
+				name.startsWith("lcs-cluster") || name.startsWith("lcs-sqs")) {
 
 				String timestamp = getTimestamp(name);
 
@@ -146,10 +146,9 @@ public class S3Cleaner extends BaseAMITool {
 		describeLaunchConfigurationsRequest.setLaunchConfigurationNames(
 			launchConfigurationNames);
 
-		DescribeLaunchConfigurationsResult
-			describeLaunchConfigurationsResult =
-				amazonAutoScalingClient.describeLaunchConfigurations(
-					describeLaunchConfigurationsRequest);
+		DescribeLaunchConfigurationsResult describeLaunchConfigurationsResult =
+			amazonAutoScalingClient.describeLaunchConfigurations(
+				describeLaunchConfigurationsRequest);
 
 		for (LaunchConfiguration launchConfiguration :
 				describeLaunchConfigurationsResult.getLaunchConfigurations()) {

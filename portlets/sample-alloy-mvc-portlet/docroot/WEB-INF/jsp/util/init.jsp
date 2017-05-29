@@ -16,32 +16,20 @@
 
 <%@ page import="com.liferay.alloy.mvc.AlloyController" %><%@
 page import="com.liferay.alloy.mvc.AlloyException" %><%@
-page import="com.liferay.alloy.mvc.AlloySearchResult" %><%@
-page import="com.liferay.alloy.mvc.BaseAlloyIndexer" %><%@
-page import="com.liferay.alloy.mvc.jsonwebservice.JSONWebServiceMethod" %><%@
-page import="com.liferay.portal.kernel.model.BaseModel" %><%@
-page import="com.liferay.portal.kernel.search.BooleanQuery" %><%@
-page import="com.liferay.portal.kernel.search.Document" %><%@
-page import="com.liferay.portal.kernel.search.Field" %><%@
-page import="com.liferay.portal.kernel.search.Indexer" %><%@
-page import="com.liferay.portal.kernel.search.SearchContext" %><%@
-page import="com.liferay.portal.kernel.search.Summary" %><%@
-page import="com.liferay.portal.kernel.search.filter.BooleanFilter" %><%@
+page import="com.liferay.alloy.mvc.AlloyServiceInvoker" %><%@
+page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
+page import="com.liferay.portal.kernel.util.OrderByComparator" %><%@
+page import="com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
-page import="com.liferay.samplealloymvc.model.Asset" %><%@
-page import="com.liferay.samplealloymvc.model.Definition" %><%@
-page import="com.liferay.samplealloymvc.model.Type" %><%@
-page import="com.liferay.samplealloymvc.service.AssetLocalServiceUtil" %><%@
-page import="com.liferay.samplealloymvc.service.DefinitionLocalServiceUtil" %><%@
-page import="com.liferay.samplealloymvc.service.TypeLocalServiceUtil" %>
+page import="com.liferay.portal.kernel.util.StringUtil" %><%@
+page import="com.liferay.portal.kernel.util.Validator" %><%@
+page import="com.liferay.samplealloymvc.model.SAMTodoItem" %><%@
+page import="com.liferay.samplealloymvc.model.SAMTodoList" %><%@
+page import="com.liferay.samplealloymvc.model.impl.SAMTodoListModelImpl" %><%@
+page import="com.liferay.samplealloymvc.service.SAMTodoItemLocalServiceUtil" %><%@
+page import="com.liferay.samplealloymvc.service.SAMTodoListLocalServiceUtil" %>
 
-<%@ page import="java.util.Locale" %><%@
-page import="java.util.regex.Matcher" %><%@
-page import="java.util.regex.Pattern" %>
+<%@ page import="java.util.List" %>
 
-<%@ page import="javax.portlet.PortletRequest" %><%@
-page import="javax.portlet.PortletResponse" %><%@
-page import="javax.portlet.PortletURL" %>
-
-<%@ include file="/WEB-INF/jsp/util/asset_util.jspf" %>
+<%@ include file="/WEB-INF/jsp/util/todo_item_constants.jspf" %>
 <%@ include file="/WEB-INF/jsp/util/portlet_keys.jspf" %>

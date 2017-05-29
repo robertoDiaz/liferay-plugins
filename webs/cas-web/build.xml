@@ -1,11 +1,19 @@
 <?xml version="1.0"?>
 <!DOCTYPE project>
 
-<project name="cas-web" basedir="." default="deploy">
+<project basedir="." default="deploy" name="cas-web">
 	<property name="compile.jsp.docroot.dir" value="tmp" />
 	<property name="original.war.file" value="cas-web.war" />
 
 	<import file="../build-common-web.xml" />
+
+	<target name="deploy">
+		<war-web
+			module.dir="${basedir}"
+		/>
+
+		<copy file="${plugin.file}" todir="${app.server.deploy.dir}" />
+	</target>
 
 	<target name="merge">
 
